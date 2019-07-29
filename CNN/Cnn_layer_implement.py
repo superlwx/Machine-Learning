@@ -1,6 +1,5 @@
 import numpy as np
 
-
 """
 
 实现卷积神经网络中卷积层和池化层
@@ -17,10 +16,10 @@ def conv_forward_naive(x, w, b, conv_param):
     :param conv_param:一个参数字典：
         - stride :卷积核的步长
         - pad :使用零填充的大小
-    :return out:输出计算后的数据，(N, F, H', W')
-            H' = (H + 2 * pad - HH) / stride
-            W' = (W + 2 * pad - WW) / stride
-    :return cache:保存输入的数据,(x, w, b, conv_param)
+    :return: out:输出计算后的数据，(N, F, H', W')
+             H' = (H + 2 * pad - HH) / stride
+             W' = (W + 2 * pad - WW) / stride
+             cache:保存输入的数据,(x, w, b, conv_param)
     """
     stride = conv_param['stride']
     pad = conv_param['stride']
@@ -33,11 +32,11 @@ def conv_forward_naive(x, w, b, conv_param):
         for f in range(F):
             new_matrix = np.ones((H_out, W_out)) * b[f]  # 加入偏置项
             for c in range(C):
-                padded_x = np.lib.pad(x[n, c], pad_width=pad,mode="constant", constant_values=0)  # 填充矩阵
+                padded_x = np.lib.pad(x[n, c], pad_width=pad, mode="constant", constant_values=0)  # 填充矩阵
                 for i in range(H_out):
                     for j in range(W_out):
                         new_matrix[i, j] += np.sum(padded_x[stride * i: stride * i + HH,
-                                                  stride * j: stride * j + WW] * w[f, c, :, :])
+                                                   stride * j: stride * j + WW] * w[f, c, :, :])
                 out[n, f] = new_matrix
     cache = (x, w, b, conv_param)
     return out, cache
@@ -69,14 +68,13 @@ def conv_backward_naive(dout, cache):
                     dw[f] += padded_x[n, :, stride * i: stride * i + HH,
                              stride * j: stride * j + WW] * dout[n, f, i, j]
                     padded_dx[n, :, stride * i: stride * i + HH,
-                             stride * j: stride * j + WW] += w[f] * dout[n, f, i, j]
+                    stride * j: stride * j + WW] += w[f] * dout[n, f, i, j]
     dx = padded_dx[:, :, pad: pad + H, pad: pad + W]
 
     return dx, dw, db
 
 
 def max_pool_forward_naive(x, pool_param):
-
     """
     一个最大池化层前向传播的简单实现
     :param x: 输入的数据，维度为（N, C, H, W）
@@ -132,6 +130,3 @@ def max_pool_backward_naive(dout, cache):
                     window = x[n, c, stride * i:stride * i + pool_height, stride * j: stride * j + pool_width]
                     dx[n, c] = (window == np.sum(window)) * dout[n, c, i, j]
     return dx
-
-
-
