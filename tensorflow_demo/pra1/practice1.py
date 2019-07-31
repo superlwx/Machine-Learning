@@ -1,6 +1,5 @@
 import tensorflow as tf
-import numpy as np
-from tensorflow_demo.practice_fun import simple_model,get_cifar10_data,run_model
+from tensorflow_demo.pra1.practice_fun1 import simple_model,get_cifar10_data,run_model
 
 tf.reset_default_graph()
 X = tf.compat.v1.placeholder(tf.float32, [None, 32, 32, 3], name='X')
@@ -15,7 +14,7 @@ X_train, y_train, X_val, y_val, X_test, y_test = get_cifar10_data()
 with tf.Session() as session:
     session.run(tf.global_variables_initializer())
     print("Training")
-    run_model(session, X, y, is_training, y_out, mean_loss, X_train, y_train, 1, 64, 100, train_step, True)
+    run_model(session, X, y, is_training, y_out, mean_loss, X_train, y_train, 2, 64, 100, train_step, True)
     print("Validation")
     run_model(session, X, y, is_training, y_out, mean_loss, X_test, y_test, 1, 64)
     session.close()

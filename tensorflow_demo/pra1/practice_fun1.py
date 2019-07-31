@@ -67,14 +67,16 @@ def run_model(session, X, y, is_training, predict, loss_val, Xd, yd,
     if training_now:
         variables.append(training)
     iter_cnt = 0
-    print(len(variables))
+    seed = 0
     for e in range(epochs):
         correct = 0
         losses = []
         for i in range(math.ceil(Xd.shape[0] / batch_size)):
-            start_idx = (i * batch_size) % Xd.shape[0]
+            start_idx = (i * batch_size)
             idx = train_indices[start_idx: start_idx + batch_size]
             actual_batch_size = yd[idx].shape[0]
+            # if actual_batch_size != batch_size:
+            #     print(actual_batch_size)
             if len(variables) == 4:
                 loss, corr, acc, _ = session.run(variables, feed_dict={X: Xd[idx],
                                                                        y: np.squeeze(yd[idx]),
@@ -100,7 +102,6 @@ def run_model(session, X, y, is_training, predict, loss_val, Xd, yd,
             plt.xlabel("minibatch number")
             plt.ylabel("minibatch loss")
             plt.show()
-
     return total_loss, total_correct
 
 
