@@ -61,7 +61,6 @@ def run_model(session, X, y, is_training, predict, loss_val, Xd, yd,
     correct_predicion = tf.equal(tf.math.argmax(predict, axis=1), y)
     accuracy = tf.reduce_mean(tf.cast(correct_predicion, tf.float32))
     train_indices = np.arange(Xd.shape[0])
-    np.random.shuffle(train_indices)
     training_now = training is not None
     variables = [loss_val, correct_predicion, accuracy]
     if training_now:
@@ -71,6 +70,7 @@ def run_model(session, X, y, is_training, predict, loss_val, Xd, yd,
     for e in range(epochs):
         correct = 0
         losses = []
+        np.random.shuffle(train_indices)
         for i in range(math.ceil(Xd.shape[0] / batch_size)):
             start_idx = (i * batch_size)
             idx = train_indices[start_idx: start_idx + batch_size]
